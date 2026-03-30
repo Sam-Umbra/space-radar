@@ -2,6 +2,7 @@ import pandas as pd
 from pathlib import Path
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
+
 # from src.config import DATA_DIR
 import numpy as np
 
@@ -16,12 +17,13 @@ def get_processed_data(filepath: Path):
 
     df["est_diameter_avg"] = (df["est_diameter_min"] + df["est_diameter_max"]) / 2
 
-    X = df.drop(columns=['potentially_hazardous'])
-    y = df['potentially_hazardous'].astype(int)
+    X = df.drop(columns=["potentially_hazardous"])
+    y = df["potentially_hazardous"].astype(int)
 
     y_encoded = label_encoder.fit_transform(y)
 
     return train_test_split(X, y, test_size=0.2, random_state=42, stratify=y_encoded)
+
 
 def create_sim_asteroids_data(n_samples=1000) -> pd.DataFrame:
     np.random.seed(42)
