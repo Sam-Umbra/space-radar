@@ -1,3 +1,10 @@
+"""
+Main API module for the Space Radar project.
+
+This module implements a FastAPI application that provides endpoints for
+asteroid hazard prediction using a pre-trained Random Forest model.
+"""
+
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import joblib
@@ -10,6 +17,7 @@ app = FastAPI(
     version="1.0.0",
 )
 
+#: Load the serialized model and scaler from the models directory.
 try:
     model = joblib.load(MODELS_DIR / "radar_model.joblib")
     scaler = joblib.load(MODELS_DIR / "scaler.joblib")
@@ -19,6 +27,15 @@ except Exception as e:
 
 
 class AsteroidData(BaseModel):
+    """
+    Pydantic model representing the input features for an asteroid.
+
+    :param est_diameter_min: Minimum estimated diameter in kilometers.
+    :param est_diameter_max: Maximum estimated diameter in kilometers.
+    :param relative_velocity: Velocity relative to Earth in km/h.
+    :param miss_distance: Distance from Earth at closest approach in kilometers.
+    :param absolute_magnitude: The intrinsic luminosity of the asteroid.
+    """
     est_diameter_min: float
     est_diameter_max: float
     relative_velocity: float
@@ -28,6 +45,16 @@ class AsteroidData(BaseModel):
 
 @app.post("/predict")
 async def predict_hazard(data: AsteroidData):
+    """
+    Predict if an asteroid is potentially hazardous based on its physical properties.
+
+    This endpoint processes input data, performs feature engineering (average diameter),
+    scales the features, and returns the model's prediction and confidence score.
+
+    :param data: The asteroid features provided in the request body.
+    :type data: AsteroidData
+    :return: A dictionary containing the hazard prediction and confidence score.
+    """
     try:
         input_dict = {
             "est_diameter_min": data.est_diameter_min,
@@ -59,4 +86,10 @@ async def predict_hazard(data: AsteroidData):
 
 @app.get("/health")
 async def health_check():
+    """
+    Check the operational status of the API and the model loading state.
+
+    :return: A dictionary indicating the online status and if the model is ready.
+    :rtype: dict
+    """
     return {"status": "online", "model_loaded": model is not None}
