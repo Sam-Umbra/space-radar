@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🛰️ Space Radar API
+# 🛰️ Space Radar
 
 **Sistema de monitoramento em tempo real de Objetos Próximos à Terra com classificação de risco por Inteligência Artificial.**
 
