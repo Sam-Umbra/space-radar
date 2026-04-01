@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🛰️ Space Radar API
+# 🛰️ Space Radar
 
 **Real-time monitoring system for Near-Earth Objects with AI-powered collision risk classification.**
 
