@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { StatCard } from '../../stat-card/stat-card';
+import { AsteroidTable } from "../../asteroid-table/asteroid-table";
 
 @Component({
   selector: 'app-main',
-  imports: [StatCard],
+  imports: [StatCard, AsteroidTable],
   templateUrl: './main.html',
   styleUrl: './main.scss',
 })

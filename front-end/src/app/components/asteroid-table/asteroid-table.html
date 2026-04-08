@@ -1,0 +1,49 @@
+<div class="asteroid-table">
+  <div class="asteroid-table_header">
+    <span class="asteroid-table_pulse"></span>
+    <h2 class="asteroid-table_title">Live Asteroid Feed</h2>
+    <span class="asteroid-table_count">{{ asteroids()?.length }} objects</span>
+  </div>
+  <div class="asteroid-table_scroll">
+    <table class="asteroid-table_table">
+      <thead>
+        <tr class="asteroid-table_head-row">
+          <th class="asteroid-table_th asteroid-table_th--left">Designation</th>
+          <th class="asteroid-table_th asteroid-table_th--right">Ø (km)</th>
+          <th class="asteroid-table_th asteroid-table_th--right">Velocity</th>
+          <th class="asteroid-table_th asteroid-table_th--right">Miss Distance</th>
+          <th class="asteroid-table_th asteroid-table_th--center">Risk</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (asteroid of asteroids(); track asteroid.id; let i = $index) {
+          <tr
+            class="asteroid-table_row"
+            [class.asteroid-table_row--selected]="selectedId() === asteroid.id"
+            [style.animation-delay]="i * 30 + 'ms'"
+            (click)="onSelect(asteroid)"
+          >
+            <td class="asteroid-table_td asteroid-table_td--name">{{ asteroid.name }}</td>
+            <td class="asteroid-table_td asteroid-table_td--right">
+              {{ asteroid.diameter_min_km.toFixed(3) }}–{{ asteroid.diameter_max_km.toFixed(3) }}
+            </td>
+            <td class="asteroid-table_td asteroid-table_td--right asteroid-table_td--mono">
+              {{ formatVelocity(asteroid.velocity_kmph) }}
+            </td>
+            <td class="asteroid-table_td asteroid-table_td--right asteroid-table_td--mono">
+              {{ formatDistance(asteroid.miss_distance_km) }}
+            </td>
+            <td class="asteroid-table_td asteroid-table_td--center">
+              <span
+                class="asteroid-table_badge"
+                [class]="'asteroid-table_badge--' + asteroid.risk.toLowerCase()"
+              >
+                {{ asteroid.risk.toUpperCase() }}
+              </span>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

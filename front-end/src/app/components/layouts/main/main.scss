@@ -23,5 +23,26 @@
       border: 1px solid #eee;
       border-radius: 8px;
     }
+
+    .main_content {
+      display: grid;
+      gap: 1.5rem;
+
+      @media (min-width: 1024px) {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+      }
+
+      .main_asteroid-table {
+        grid-column: span 1 / span 1;
+
+        @media (min-width: 1024px) {
+          grid-column: span 3 / span 3;
+        }
+
+        background-color: #ffffff;
+        border-radius: 0.75rem;
+        overflow: hidden;
+      }
+    }
   }
 }
