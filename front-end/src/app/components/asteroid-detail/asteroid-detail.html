@@ -1,0 +1,47 @@
+@if (!asteroid()) {
+  <div class="asteroid-detail asteroid-detail--empty">
+    <span class="asteroid-detail_empty-icon" [innerHTML]="targetLgIcon"></span>
+    <p class="asteroid-detail_empty-label">SELECT AN OBJECT</p>
+  </div>
+}
+
+@if (asteroid(); as asteroid) {
+  <div class="asteroid-detail" [class]="'asteroid-detail--' + asteroid.risk.toLowerCase()">
+    <div class="asteroid-detail_scanline"></div>
+
+    <div class="asteroid-detail_header">
+      <div class="asteroid-detail_title-group">
+        <h3 class="asteroid-detail_name">{{ asteroid.name }}</h3>
+        <div class="asteroid-detail_meta">
+          <span
+            class="asteroid-detail_badge"
+            [class]="'asteroid-detail_badge--' + asteroid.risk.toLowerCase()"
+          >
+            {{ asteroid.risk.toUpperCase() }}
+          </span>
+          <span class="asteroid-detail_confidence">
+            ML Confidence: {{ (asteroid.confidence_score * 100).toFixed(0) }}%
+          </span>
+        </div>
+      </div>
+      <button class="asteroid-detail_close" (click)="onClose()" [innerHTML]="xIcon"></button>
+    </div>
+
+    <div class="asteroid-detail_body">
+      @for (row of rows(); track row.label) {
+        <div class="asteroid-detail_row">
+          <span class="asteroid-detail_row-label">
+            <span class="asteroid-detail_row-icon" [innerHTML]="safeIcon(row.icon)"></span>
+            {{ row.label }}
+          </span>
+          <span class="asteroid-detail_row-value">{{ row.value }}</span>
+        </div>
+      }
+
+      <div class="asteroid-detail_analysis">
+        <p class="asteroid-detail_analysis-title">Risk Analysis</p>
+        <p class="asteroid-detail_analysis-text">{{ riskText() }}</p>
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,25 @@
+<div class="risk-chart">
+  <h2 class="risk-chart_title">Risk Distribution</h2>
+
+  <div class="risk-chart_canvas-wrapper">
+    <canvas
+      baseChart
+      type="doughnut"
+      [data]="chartData()"
+      [options]="chartOptions"
+    ></canvas>
+  </div>
+
+  <div class="risk-chart_legend">
+    @for (seg of segments(); track seg.name) {
+      <div class="risk-chart_legend-item">
+        <span
+          class="risk-chart_legend-dot"
+          [class]="'risk-chart_legend-dot--' + seg.name.toLowerCase()"
+        ></span>
+        <span class="risk-chart_legend-label">{{ seg.name }}</span>
+        <span class="risk-chart_legend-value">{{ seg.value }}</span>
+      </div>
+    }
+  </div>
+</div>

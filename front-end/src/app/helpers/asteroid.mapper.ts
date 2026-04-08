@@ -16,5 +16,8 @@ export function mapPredictionToAsteroid(response: PredictionResponse): Asteroid 
     velocity_kmph: response.relative_velocity,
     miss_distance_km: response.miss_distance,
     risk: toAsteroidRisk(response),
+    absolute_magnitude: response.absolute_magnitude,
+    approach_date: response.approach_date,
+    confidence_score: response.confidence_score,
   };
 }

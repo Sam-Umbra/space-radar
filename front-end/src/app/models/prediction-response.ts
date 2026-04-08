@@ -9,4 +9,5 @@ export interface PredictionResponse {
   relative_velocity: number;
   miss_distance: number;
   absolute_magnitude: number;
+  approach_date: Date
 }

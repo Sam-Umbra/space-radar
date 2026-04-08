@@ -1,23 +1,40 @@
 <main class="main">
   <div class="main_stat-cards">
-    <app-stat-card label="NEOs Tracked" [value]="neosCount().toString()" [icon]="globeIcon" color="primary" />
+    <app-stat-card
+      label="NEOs Tracked"
+      [value]="neosCount().toString()"
+      [icon]="globeIcon"
+      color="primary"
+    />
     <app-stat-card
       label="Hazardous"
       [value]="hazardous().toString()"
       [icon]="alertTriangleIcon"
-      [color]="hazardousColor"
+      [color]="hazardousColor()"
     />
     <app-stat-card
       label="Closest Approach"
-      [value]="closestDist().toString()"
+      [value]="closestDist()"
       [icon]="crosshairIcon"
       color="caution"
     />
     <app-stat-card label="Avg Velocity" [value]="avgVelocity()" [icon]="zapIcon" color="safe" />
   </div>
+
   <div class="main_content">
     <div class="main_asteroid-table">
-        <app-asteroid-table [asteroids]="websocketService.responses()"></app-asteroid-table>
+      <app-asteroid-table
+        [asteroids]="websocketService.responses()"
+        [selectedId]="selectedNeo()?.id ?? null"
+        (asteroidSelect)="onAsteroidSelect($event)"
+      />
+    </div>
+    <div class="main_asteroid-detail">
+      <app-asteroid-detail [asteroid]="selectedNeo()" (close)="onDetailClose()" />
+    </div>
+    <div class="main_asteroid-charts">
+      <app-risk-chart [asteroids]="websocketService.responses()" />
+      <app-approach-timeline [asteroids]="websocketService.responses()" />
     </div>
   </div>
 </main>

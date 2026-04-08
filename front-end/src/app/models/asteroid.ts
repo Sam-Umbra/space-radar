@@ -8,4 +8,7 @@ export interface Asteroid {
   velocity_kmph: number;
   miss_distance_km: number;
   risk: AsteroidRisk;
+  absolute_magnitude: number;
+  approach_date: Date;
+  confidence_score: number;
 }

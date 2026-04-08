@@ -1,0 +1,64 @@
+.risk-chart {
+  background: hsl(228 40% 10% / 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--border, hsl(228, 30%, 20%));
+  border-radius: var(--radius, 0.5rem);
+  padding: 1.25rem;
+
+  &_title {
+    margin: 0 0 1rem;
+    font-family: var(--font-space, 'Space Mono', monospace);
+    font-size: 0.875rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted-foreground, hsl(215, 20%, 55%));
+  }
+
+  &_canvas-wrapper {
+    height: 200px;
+    position: relative;
+  }
+
+  &_legend {
+    display: flex;
+    justify-content: center;
+    gap: 1.25rem;
+    margin-top: 0.5rem;
+  }
+
+  &_legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-family: var(--font-space, 'Space Mono', monospace);
+    font-size: 0.75rem;
+  }
+
+  &_legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+
+    &--safe {
+      background: hsl(193, 100%, 50%);
+    }
+    &--caution {
+      background: hsl(36, 100%, 50%);
+    }
+    &--danger {
+      background: hsl(0, 85%, 55%);
+    }
+  }
+
+  &_legend-label {
+    color: var(--muted-foreground, hsl(215, 20%, 55%));
+  }
+
+  &_legend-value {
+    color: var(--foreground, hsl(210, 40%, 92%));
+    font-weight: 700;
+  }
+}

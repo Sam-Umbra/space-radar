@@ -1,49 +1,67 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { StatCard } from '../../stat-card/stat-card';
 import { AsteroidTable, formatDistance, formatVelocity } from '../../asteroid-table/asteroid-table';
+import { AsteroidDetail } from '../../asteroid-detail/asteroid-detail';
 import { WebsocketService } from '../../../services/websocket-service';
-
-@Component({
-  selector: 'app-main',
-  imports: [StatCard, AsteroidTable],
-  templateUrl: './main.html',
-  styleUrl: './main.scss',
-})
-export class Main {
-  public websocketService = inject(WebsocketService);
-
-  protected neosCount = computed(() => this.websocketService.responses().length);
-  protected hazardous = computed(
-    () => this.websocketService.responses().filter((a) => a.risk === 'Danger').length,
-  );
-  protected closestDist = computed(() => {
-    const allAsteroids = this.websocketService.responses();
-    if (!allAsteroids.length) return '—';
-    const closest = allAsteroids.reduce(
-      (min, n) => (n.miss_distance_km < min.miss_distance_km ? n : min),
-      allAsteroids[0],
-    );
-    return formatDistance(closest.miss_distance_km);
-  });
-
-  protected avgVelocity = computed(() => {
-    const allAsteroids = this.websocketService.responses();
-    if (!allAsteroids.length) return '—';
-    const avg = allAsteroids.reduce((sum, n) => sum + n.velocity_kmph, 0) / allAsteroids.length;
-    return formatVelocity(avg);
-  });
-
-  protected globeIcon = globe;
-  protected alertTriangleIcon = alertTriangle;
-  protected crosshairIcon = crosshair;
-  protected zapIcon = zap;
-
-  get hazardousColor(): 'danger' | 'caution' {
-    return this.hazardous() > 5 ? 'danger' : 'caution';
-  }
-}
+import { Asteroid } from '../../../models/asteroid';
+import { RiskChart } from "../../risk-chart/risk-chart";
+import { ApproachTimeline } from "../../approach-timeline/approach-timeline";
 
 const globe = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>`;
 const alertTriangle = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>`;
 const crosshair = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="22" x2="18" y1="12" y2="12"/><line x1="6" x2="2" y1="12" y2="12"/><line x1="12" x2="12" y1="6" y2="2"/><line x1="12" x2="12" y1="22" y2="18"/></svg>`;
 const zap = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>`;
+
+@Component({
+  selector: 'app-main',
+  imports: [StatCard, AsteroidTable, AsteroidDetail, RiskChart, ApproachTimeline],
+  templateUrl: './main.html',
+  styleUrl: './main.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class Main {
+  protected globeIcon = globe;
+  protected alertTriangleIcon = alertTriangle;
+  protected crosshairIcon = crosshair;
+  protected zapIcon = zap;
+
+  protected websocketService = inject(WebsocketService);
+
+  protected selectedNeo = signal<Asteroid | null>(null);
+
+  protected neosCount = computed(() => this.websocketService.responses().length);
+
+  protected hazardous = computed(
+    () => this.websocketService.responses().filter((a) => a.risk === 'Danger').length,
+  );
+
+  protected closestDist = computed(() => {
+    const all = this.websocketService.responses();
+    if (!all.length) return '—';
+    const closest = all.reduce(
+      (min, n) => (n.miss_distance_km < min.miss_distance_km ? n : min),
+      all[0],
+    );
+    return formatDistance(closest.miss_distance_km);
+  });
+
+  protected avgVelocity = computed(() => {
+    const all = this.websocketService.responses();
+    if (!all.length) return '—';
+    const avg = all.reduce((sum, n) => sum + n.velocity_kmph, 0) / all.length;
+    return formatVelocity(avg);
+  });
+
+  protected hazardousColor = computed<'danger' | 'caution'>(() =>
+    this.hazardous() > 5 ? 'danger' : 'caution',
+  );
+
+  protected onAsteroidSelect(asteroid: Asteroid): void {
+    this.selectedNeo.set(asteroid);
+  }
+
+  protected onDetailClose(): void {
+    this.selectedNeo.set(null);
+  }
+}

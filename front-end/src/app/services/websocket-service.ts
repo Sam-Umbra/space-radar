@@ -19,7 +19,6 @@ export class WebsocketService {
       onConnect: () => {
         this.isConnected = true;
         this.stopMockData();
-
         this.client.subscribe('/radar/prediction', (message) => {
           const raw: PredictionResponse = JSON.parse(message.body);
           const asteroid = mapPredictionToAsteroid(raw);
@@ -47,10 +46,8 @@ export class WebsocketService {
 
   private startMockData(): void {
     if (this.mockInterval !== null) return;
-
     console.warn('[WebsocketService] No connection — using mock data');
     this.responses.set(this.generateMockAsteroids(8));
-
     this.mockInterval = setInterval(() => {
       const newAsteroid = this.generateMockAsteroid(Date.now());
       this.responses.update((prev) => [...prev, newAsteroid]);
@@ -59,7 +56,6 @@ export class WebsocketService {
 
   private stopMockData(): void {
     if (this.mockInterval === null) return;
-
     clearInterval(this.mockInterval);
     this.mockInterval = null;
     this.responses.set([]);
@@ -86,6 +82,9 @@ export class WebsocketService {
     else if (isHazardous || confidence >= 0.4) risk = 'Caution';
     else risk = 'Safe';
 
+    const approachDate = new Date();
+    approachDate.setDate(approachDate.getDate() + Math.floor(rng() * 365));
+
     return {
       id,
       name: `NEO ${id}`,
@@ -93,6 +92,9 @@ export class WebsocketService {
       diameter_max_km: parseFloat((rng() * 1.5 + 0.9).toFixed(4)),
       velocity_kmph: parseFloat((rng() * (velMax - velMin) + velMin).toFixed(1)),
       miss_distance_km: parseFloat(miss.toFixed(2)),
+      absolute_magnitude: parseFloat((rng() * 10 + 15).toFixed(1)), // typical range 15–25 H
+      approach_date: approachDate,
+      confidence_score: parseFloat(confidence.toFixed(4)),
       risk,
     };
   }

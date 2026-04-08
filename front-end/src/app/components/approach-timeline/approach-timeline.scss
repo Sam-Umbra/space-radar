@@ -1,0 +1,23 @@
+.approach-timeline {
+  background: hsl(228 40% 10% / 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--border, hsl(228, 30%, 20%));
+  border-radius: var(--radius, 0.5rem);
+  padding: 1.25rem;
+
+  &_title {
+    margin: 0 0 1rem;
+    font-family: var(--font-space, 'Space Mono', monospace);
+    font-size: 0.875rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted-foreground, hsl(215, 20%, 55%));
+  }
+
+  &_canvas-wrapper {
+    height: 180px;
+    position: relative;
+  }
+}
