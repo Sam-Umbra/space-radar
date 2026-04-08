@@ -1,11 +1,9 @@
 import { ChangeDetectionStrategy, Component} from '@angular/core';
-import { Header } from "./components/layouts/header/header";
-import { Main } from "./components/layouts/main/main";
-import { StarField } from "./components/star-field/star-field";
+import { RouterOutlet } from "@angular/router";
 
 @Component({
   selector: 'app-root',
-  imports: [Header, Main, StarField],
+  imports: [RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })

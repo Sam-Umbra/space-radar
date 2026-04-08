@@ -1,0 +1,105 @@
+@use "sass:map";
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes count-up {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+$themes: (
+  primary: (
+    color:  hsl(193, 100%, 50%),
+    glow:   hsl(193, 100%, 50%),
+  ),
+  safe: (
+    color:  hsl(193, 100%, 50%),
+    glow:   hsl(193, 100%, 50%),
+  ),
+  caution: (
+    color:  hsl(36, 100%, 50%),
+    glow:   hsl(36, 100%, 50%),
+  ),
+  danger: (
+    color:  hsl(0, 85%, 55%),
+    glow:   hsl(0, 85%, 55%),
+  ),
+);
+
+.stat-card {
+  position: relative;
+  background: hsl(var(--card, 228 40% 10%) / 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid transparent;
+  border-radius: var(--radius, 0.5rem);
+  padding: 1.25rem;
+  overflow: hidden;
+  animation: fade-in 0.4s ease both;
+
+  @each $name, $vals in $themes {
+    &-#{$name} {
+      color: map.get($vals, color);
+      border-color: rgba(map.get($vals, color), 0.3);
+      box-shadow:
+        0 0 15px rgba(map.get($vals, glow), 0.3),
+        0 0 30px rgba(map.get($vals, glow), 0.1);
+    }
+  }
+
+  &_scanline {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      hsl(193 100% 50% / 0.03) 2px,
+      hsl(193 100% 50% / 0.03) 4px
+    );
+  }
+
+  &_content {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  &_text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &_label {
+    margin: 0 0 0.5rem;
+    font-family: var(--font-space, 'Space Mono', monospace);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted-foreground, hsl(215, 20%, 55%));
+  }
+
+  &_value {
+    margin: 0;
+    font-family: var(--font-space, 'Space Mono', monospace);
+    font-size: 1.5rem;
+    font-weight: 700;
+    animation: count-up 0.5s ease both;
+  }
+
+  &_icon {
+    opacity: 0.6;
+    display: flex;
+    align-items: center;
+
+    svg {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+}

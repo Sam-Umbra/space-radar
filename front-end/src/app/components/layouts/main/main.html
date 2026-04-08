@@ -1,5 +1,18 @@
 <main class="main">
-    <div class="main_stat-cards">
-
-    </div>
+  <div class="main_stat-cards">
+    <app-stat-card label="NEOs Tracked" [value]="neosCount" [icon]="globeIcon" color="primary" />
+    <app-stat-card
+      label="Hazardous"
+      [value]="hazardous.toString()"
+      [icon]="alertTriangleIcon"
+      [color]="hazardousColor"
+    />
+    <app-stat-card
+      label="Closest Approach"
+      [value]="closestDist"
+      [icon]="crosshairIcon"
+      color="caution"
+    />
+    <app-stat-card label="Avg Velocity" [value]="avgVelocity" [icon]="zapIcon" color="safe" />
+  </div>
 </main>

@@ -1,1 +1,10 @@
-<p>stat-card works!</p>
+<div class="stat-card" [class]="'stat-card-' + color()">
+  <div class="stat-card_scanline"></div>
+  <div class="stat-card_content">
+    <div class="stat-card_text">
+      <p class="stat-card_label">{{ label() }}</p>
+      <p class="stat-card_value">{{ value() }}</p>
+    </div>
+    <span class="stat-card_icon" [innerHTML]="safeIcon()"></span>
+  </div>
+</div>
