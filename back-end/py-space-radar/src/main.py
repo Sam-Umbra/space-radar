@@ -30,12 +30,15 @@ class AsteroidData(BaseModel):
     """
     Pydantic model representing the input features for an asteroid.
 
+    :param id: Asteroid id from NASA API
     :param est_diameter_min: Minimum estimated diameter in kilometers.
     :param est_diameter_max: Maximum estimated diameter in kilometers.
     :param relative_velocity: Velocity relative to Earth in km/h.
     :param miss_distance: Distance from Earth at closest approach in kilometers.
     :param absolute_magnitude: The intrinsic luminosity of the asteroid.
     """
+    id: int
+    name: str
     est_diameter_min: float
     est_diameter_max: float
     relative_velocity: float
@@ -73,9 +76,16 @@ async def predict_hazard(data: AsteroidData):
         probability = model.predict_proba(X_scaled)[0][1]
 
         return {
+            "id": data.id,
+            "name": data.name,
             "is_hazardous": bool(prediction),
             "confidence_score": round(float(probability), 4),
             "status": "success",
+            "est_diameter_min": data.est_diameter_min,
+            "relative_velocity": data.relative_velocity,
+            "miss_distance": data.miss_distance,
+            "absolute_magnitude": data.absolute_magnitude,
+            "est_diameter_max": data.est_diameter_max,
         }
     except Exception as e:
         print(f"Processing Error: {e}")
