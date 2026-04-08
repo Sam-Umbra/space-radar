@@ -1,6 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { StatCard } from '../../stat-card/stat-card';
-import { AsteroidTable } from "../../asteroid-table/asteroid-table";
+import { AsteroidTable, formatDistance, formatVelocity } from '../../asteroid-table/asteroid-table';
 import { WebsocketService } from '../../../services/websocket-service';
 
 @Component({
@@ -10,12 +10,28 @@ import { WebsocketService } from '../../../services/websocket-service';
   styleUrl: './main.scss',
 })
 export class Main {
-  public asteroidService = inject(WebsocketService);
+  public websocketService = inject(WebsocketService);
 
-  protected neosCount = '142';
-  protected hazardous = 3;
-  protected closestDist = '1.2 AU';
-  protected avgVelocity = '18.4 km/s';
+  protected neosCount = computed(() => this.websocketService.responses().length);
+  protected hazardous = computed(
+    () => this.websocketService.responses().filter((a) => a.risk === 'Danger').length,
+  );
+  protected closestDist = computed(() => {
+    const allAsteroids = this.websocketService.responses();
+    if (!allAsteroids.length) return '—';
+    const closest = allAsteroids.reduce(
+      (min, n) => (n.miss_distance_km < min.miss_distance_km ? n : min),
+      allAsteroids[0],
+    );
+    return formatDistance(closest.miss_distance_km);
+  });
+
+  protected avgVelocity = computed(() => {
+    const allAsteroids = this.websocketService.responses();
+    if (!allAsteroids.length) return '—';
+    const avg = allAsteroids.reduce((sum, n) => sum + n.velocity_kmph, 0) / allAsteroids.length;
+    return formatVelocity(avg);
+  });
 
   protected globeIcon = globe;
   protected alertTriangleIcon = alertTriangle;
@@ -23,7 +39,7 @@ export class Main {
   protected zapIcon = zap;
 
   get hazardousColor(): 'danger' | 'caution' {
-    return this.hazardous > 5 ? 'danger' : 'caution';
+    return this.hazardous() > 5 ? 'danger' : 'caution';
   }
 }
 
