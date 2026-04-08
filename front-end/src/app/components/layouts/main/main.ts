@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { StatCard } from '../../stat-card/stat-card';
 import { AsteroidTable } from "../../asteroid-table/asteroid-table";
+import { WebsocketService } from '../../../services/websocket-service';
 
 @Component({
   selector: 'app-main',
@@ -9,6 +10,8 @@ import { AsteroidTable } from "../../asteroid-table/asteroid-table";
   styleUrl: './main.scss',
 })
 export class Main {
+  public asteroidService = inject(WebsocketService);
+
   protected neosCount = '142';
   protected hazardous = 3;
   protected closestDist = '1.2 AU';

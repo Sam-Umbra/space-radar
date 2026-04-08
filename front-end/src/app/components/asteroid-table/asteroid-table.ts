@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { Asteroid } from '../../models/asteroid';
 
 export function formatDistance(km: number): string {
@@ -18,7 +18,8 @@ export function formatVelocity(kmph: number): string {
   styleUrl: './asteroid-table.scss',
 })
 export class AsteroidTable {
-  asteroids = input<Asteroid[]>();
+
+  asteroids = input.required<Asteroid[]>();
   selectedId = input<string | null>(null);
   asteroidSelect = output<Asteroid>();
   formatDistance = formatDistance;

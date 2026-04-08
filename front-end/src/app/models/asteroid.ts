@@ -1,4 +1,4 @@
-export type NeoRisk = 'Safe' | 'Caution' | 'Danger';
+export type AsteroidRisk = 'Safe' | 'Caution' | 'Danger';
 
 export interface Asteroid {
   id: string;
@@ -7,5 +7,5 @@ export interface Asteroid {
   diameter_max_km: number;
   velocity_kmph: number;
   miss_distance_km: number;
-  risk: NeoRisk;
+  risk: AsteroidRisk;
 }
