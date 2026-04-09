@@ -1,35 +1,49 @@
-@use "sass:map";
+@use 'sass:map';
 @keyframes fade-in {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes count-up {
-  from { opacity: 0; transform: translateY(4px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 $themes: (
   primary: (
-    color:  hsl(193, 100%, 50%),
-    glow:   hsl(193, 100%, 50%),
+    color: hsl(193, 100%, 50%),
+    glow: hsl(193, 100%, 50%),
   ),
   safe: (
-    color:  hsl(193, 100%, 50%),
-    glow:   hsl(193, 100%, 50%),
+    color: hsl(193, 100%, 50%),
+    glow: hsl(193, 100%, 50%),
   ),
   caution: (
-    color:  hsl(36, 100%, 50%),
-    glow:   hsl(36, 100%, 50%),
+    color: hsl(36, 100%, 50%),
+    glow: hsl(36, 100%, 50%),
   ),
   danger: (
-    color:  hsl(0, 85%, 55%),
-    glow:   hsl(0, 85%, 55%),
+    color: hsl(0, 85%, 55%),
+    glow: hsl(0, 85%, 55%),
   ),
 );
 
 .stat-card {
   position: relative;
+  min-width: 0;
+  padding: 1rem;
   background: hsl(var(--card, 228 40% 10%) / 0.6);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -38,6 +52,10 @@ $themes: (
   padding: 1.25rem;
   overflow: hidden;
   animation: fade-in 0.4s ease both;
+
+  @media (min-width: 640px) {
+    padding: 1.25rem;
+  }
 
   @each $name, $vals in $themes {
     &-#{$name} {
@@ -66,6 +84,7 @@ $themes: (
   &_content {
     position: relative;
     display: flex;
+    flex-direction: row;
     align-items: flex-start;
     justify-content: space-between;
   }
@@ -78,7 +97,10 @@ $themes: (
   &_label {
     margin: 0 0 0.5rem;
     font-family: var(--font-space, 'Space Mono', monospace);
-    font-size: 0.75rem;
+    font-size: clamp(0.6rem, 2vw, 0.75rem);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--muted-foreground, hsl(215, 20%, 55%));
@@ -87,7 +109,7 @@ $themes: (
   &_value {
     margin: 0;
     font-family: var(--font-space, 'Space Mono', monospace);
-    font-size: 1.5rem;
+    font-size: clamp(1rem, 4vw, 1.5rem);
     font-weight: 700;
     animation: count-up 0.5s ease both;
   }
@@ -98,8 +120,8 @@ $themes: (
     align-items: center;
 
     svg {
-      width: 1.5rem;
-      height: 1.5rem;
+      width: clamp(1.2rem, 3vw, 1.5rem); // Shrinks icon
+      height: clamp(1.2rem, 3vw, 1.5rem);
     }
   }
 }
