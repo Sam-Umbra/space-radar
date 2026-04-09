@@ -79,7 +79,7 @@ server.port=8080
 ```
 ---
  
-## 🏃 How to Run
+## 🏃 How to Run the Java API
  
 **1. Clone the repository:**
 ```bash
